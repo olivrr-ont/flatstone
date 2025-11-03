@@ -71,6 +71,26 @@ class Workspace(QGraphicsView):
         for line in lines:
             painter.drawLine(line[0], line[1])
 
+    # === Preferences methods ===
+    def set_grid_size(self, size: int):
+        """Set grid size and trigger redraw"""
+        self.grid_size = size
+        self.update()
+
+    def set_grid_color(self, color: QColor):
+        """Set grid color and trigger redraw"""
+        self.grid_color = color
+        self.update()
+
+    def set_background_color(self, color: QColor):
+        """Set background color"""
+        self.setBackgroundBrush(color)
+
+    def set_grid_visible(self, visible: bool):
+        """Set grid visibility and trigger redraw"""
+        self.grid_visible = visible
+        self.update()
+
     # === Right-click context menu ===
     def contextMenuEvent(self, event):
         menu = QMenu(self)
