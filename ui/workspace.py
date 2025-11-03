@@ -45,8 +45,11 @@ class Workspace(QGraphicsView):
         super().drawBackground(painter, rect)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, False)
 
-        grid_color = QColor(30, 30, 30)
-        pen = QPen(grid_color)
+        # Only draw grid if it's visible
+        if not self.grid_visible:
+            return
+
+        pen = QPen(self.grid_color)
         pen.setWidth(1)
         painter.setPen(pen)
 
