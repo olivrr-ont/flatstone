@@ -16,6 +16,10 @@ class MainWindow(QMainWindow):
         self.workspace = Workspace()
         self.setCentralWidget(self.workspace)
 
+        # === Preferences Manager ===
+        self.preferences_manager = PreferencesManager()
+        self.preferences_manager.set_workspace(self.workspace)
+
         # === Menus ===
         self.create_menus()
 
