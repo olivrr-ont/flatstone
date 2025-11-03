@@ -60,3 +60,13 @@ class MainWindow(QMainWindow):
         help_menu = menu_bar.addMenu("Help")
         about_action = QAction("About Flatstone", self)
         help_menu.addAction(about_action)
+
+    def open_preferences(self):
+        """Open the preferences dialog"""
+        dialog = PreferencesDialog(self.preferences_manager, self)
+        dialog.exec()
+
+    def toggle_grid(self):
+        """Toggle grid visibility via preferences manager"""
+        current_visibility = self.preferences_manager.get_setting("grid", "visible")
+        self.preferences_manager.set_setting("grid", "visible", not current_visibility)
