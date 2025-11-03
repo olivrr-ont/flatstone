@@ -2,6 +2,8 @@
 from PyQt6.QtWidgets import QMainWindow, QStatusBar
 from PyQt6.QtGui import QAction
 from ui.workspace import Workspace
+from ui.dialogs import PreferencesDialog
+from data.preferences_manager import PreferencesManager
 
 
 class MainWindow(QMainWindow):
