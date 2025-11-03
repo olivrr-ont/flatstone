@@ -42,11 +42,13 @@ class MainWindow(QMainWindow):
         # --- Edit ---
         edit_menu = menu_bar.addMenu("Edit")
         prefs_action = QAction("Preferences...", self)
+        prefs_action.triggered.connect(self.open_preferences)
         edit_menu.addAction(prefs_action)
 
         # --- View ---
         view_menu = menu_bar.addMenu("View")
         grid_action = QAction("Toggle Grid", self)
+        grid_action.triggered.connect(self.toggle_grid)
         view_menu.addAction(grid_action)
 
         # --- Window ---
