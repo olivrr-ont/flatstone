@@ -17,6 +17,8 @@ class Workspace(QGraphicsView):
         # === Viewport setup ===
         self.scale_factor = 1.0
         self.grid_size = 32
+        self.grid_color = QColor(30, 30, 30)
+        self.grid_visible = True
         self.setBackgroundBrush(QColor(0, 0, 0))  # Black background
 
         # Create an initial area to draw the grid
