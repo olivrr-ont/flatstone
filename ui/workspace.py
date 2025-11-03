@@ -118,11 +118,20 @@ class Workspace(QGraphicsView):
         view_menu.addAction(toggle_grid)
         menu.addMenu(view_menu)
 
-        # Example connections
-        import_redstone.triggered.connect(lambda: print("Import Redstone Component"))
-        import_blocks.triggered.connect(lambda: print("Import Other Block"))
-        prefs_action.triggered.connect(lambda: print("Open Preferences"))
-        toggle_grid.triggered.connect(lambda: print("Toggle grid visibility"))
+        # Connect preferences action to parent's open_preferences method if available
+        parent = self.parent()
+        while parent and not hasattr(parent, 'open_preferences'):
+            parent = parent.parent()
+
+        if parent and hasattr(parent, 'open_preferences'):
+            prefs_action.triggered.connect(parent.open_preferences)
+            toggle_grid.triggered.connect(parent.toggle_grid)
+        else:
+            # Fallback to print if no parent with preferences methods
+            import_redstone.triggered.connect(lambda: print("Import Redstone Component"))
+            import_blocks.triggered.connect(lambda: print("Import Other Block"))
+            prefs_action.triggered.connect(lambda: print("Open Preferences"))
+            toggle_grid.triggered.connect(lambda: print("Toggle grid visibility"))
 
         # Show the menu
         menu.exec(event.globalPos())
