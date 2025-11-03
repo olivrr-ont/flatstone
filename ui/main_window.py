@@ -2,6 +2,8 @@
 from PyQt6.QtWidgets import QMainWindow, QStatusBar
 from PyQt6.QtGui import QAction
 from ui.workspace import Workspace
+from ui.dialogs import PreferencesDialog
+from data.preferences_manager import PreferencesManager
 
 
 class MainWindow(QMainWindow):
@@ -13,6 +15,10 @@ class MainWindow(QMainWindow):
         # === Central Workspace ===
         self.workspace = Workspace()
         self.setCentralWidget(self.workspace)
+
+        # === Preferences Manager ===
+        self.preferences_manager = PreferencesManager()
+        self.preferences_manager.set_workspace(self.workspace)
 
         # === Menus ===
         self.create_menus()
@@ -36,11 +42,13 @@ class MainWindow(QMainWindow):
         # --- Edit ---
         edit_menu = menu_bar.addMenu("Edit")
         prefs_action = QAction("Preferences...", self)
+        prefs_action.triggered.connect(self.open_preferences)
         edit_menu.addAction(prefs_action)
 
         # --- View ---
         view_menu = menu_bar.addMenu("View")
         grid_action = QAction("Toggle Grid", self)
+        grid_action.triggered.connect(self.toggle_grid)
         view_menu.addAction(grid_action)
 
         # --- Window ---
@@ -52,3 +60,13 @@ class MainWindow(QMainWindow):
         help_menu = menu_bar.addMenu("Help")
         about_action = QAction("About Flatstone", self)
         help_menu.addAction(about_action)
+
+    def open_preferences(self):
+        """Open the preferences dialog"""
+        dialog = PreferencesDialog(self.preferences_manager, self)
+        dialog.exec()
+
+    def toggle_grid(self):
+        """Toggle grid visibility via preferences manager"""
+        current_visibility = self.preferences_manager.get_setting("grid", "visible")
+        self.preferences_manager.set_setting("grid", "visible", not current_visibility)

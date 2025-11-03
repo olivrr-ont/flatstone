@@ -17,6 +17,8 @@ class Workspace(QGraphicsView):
         # === Viewport setup ===
         self.scale_factor = 1.0
         self.grid_size = 32
+        self.grid_color = QColor(30, 30, 30)
+        self.grid_visible = True
         self.setBackgroundBrush(QColor(0, 0, 0))  # Black background
 
         # Create an initial area to draw the grid
@@ -43,8 +45,11 @@ class Workspace(QGraphicsView):
         super().drawBackground(painter, rect)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, False)
 
-        grid_color = QColor(30, 30, 30)
-        pen = QPen(grid_color)
+        # Only draw grid if it's visible
+        if not self.grid_visible:
+            return
+
+        pen = QPen(self.grid_color)
         pen.setWidth(1)
         painter.setPen(pen)
 
@@ -65,6 +70,26 @@ class Workspace(QGraphicsView):
 
         for line in lines:
             painter.drawLine(line[0], line[1])
+
+    # === Preferences methods ===
+    def set_grid_size(self, size: int):
+        """Set grid size and trigger redraw"""
+        self.grid_size = size
+        self.update()
+
+    def set_grid_color(self, color: QColor):
+        """Set grid color and trigger redraw"""
+        self.grid_color = color
+        self.update()
+
+    def set_background_color(self, color: QColor):
+        """Set background color"""
+        self.setBackgroundBrush(color)
+
+    def set_grid_visible(self, visible: bool):
+        """Set grid visibility and trigger redraw"""
+        self.grid_visible = visible
+        self.update()
 
     # === Right-click context menu ===
     def contextMenuEvent(self, event):
@@ -93,11 +118,20 @@ class Workspace(QGraphicsView):
         view_menu.addAction(toggle_grid)
         menu.addMenu(view_menu)
 
-        # Example connections
-        import_redstone.triggered.connect(lambda: print("Import Redstone Component"))
-        import_blocks.triggered.connect(lambda: print("Import Other Block"))
-        prefs_action.triggered.connect(lambda: print("Open Preferences"))
-        toggle_grid.triggered.connect(lambda: print("Toggle grid visibility"))
+        # Connect preferences action to parent's open_preferences method if available
+        parent = self.parent()
+        while parent and not hasattr(parent, 'open_preferences'):
+            parent = parent.parent()
+
+        if parent and hasattr(parent, 'open_preferences'):
+            prefs_action.triggered.connect(parent.open_preferences)
+            toggle_grid.triggered.connect(parent.toggle_grid)
+        else:
+            # Fallback to print if no parent with preferences methods
+            import_redstone.triggered.connect(lambda: print("Import Redstone Component"))
+            import_blocks.triggered.connect(lambda: print("Import Other Block"))
+            prefs_action.triggered.connect(lambda: print("Open Preferences"))
+            toggle_grid.triggered.connect(lambda: print("Toggle grid visibility"))
 
         # Show the menu
         menu.exec(event.globalPos())
