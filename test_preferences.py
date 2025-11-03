@@ -77,6 +77,7 @@ def test_preferences_manager():
         assert manager.get_setting("background", "color") == "#000000"
 
         print("✅ All PreferencesManager tests passed!")
+        return True
 
     finally:
         # Cleanup
