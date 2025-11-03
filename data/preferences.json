@@ -1,1 +1,15 @@
-
+{
+  "grid": {
+    "size": 32,
+    "color": "#1e1e1e",
+    "visible": true
+  },
+  "background": {
+    "color": "#000000"
+  },
+  "simulation": {
+    "tick_rate": 20,
+    "auto_start": false,
+    "update_delay": 50
+  }
+}
